@@ -1,13 +1,15 @@
-cmake_minimum_required(VERSION 3.21)
-project(FEUP_DA_PROJ1)
+cmake_minimum_required(VERSION 3.20.2)
+project(logistics)
 
 set(CMAKE_CXX_STANDARD 20)
 
 include_directories(include)
 
-
-add_executable(urban-delivery
+add_executable(logistics
     main.cpp
+    src/dataset.cpp
+    src/entities/delivery.cpp
+    src/entities/van.cpp
 )
 
 find_package(Doxygen)

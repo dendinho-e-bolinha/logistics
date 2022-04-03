@@ -6,15 +6,13 @@ The main task of this work is to implement a system capable of managing a modern
 
 ## Building
 
-```
-TBD
-```
+This project uses [cmake](https://cmake.org/). Assuming it's installed and properly setup, simply run `cmake -S . -B build` in this project's directory to generate the build system, then `cmake --build build` to actually build the project.
+
+This will generate one binary in the `build` directory, `logistics`.
 
 ## Running
 
-```
-TBD
-```
+Simply run the executable generated in the last section.
 
 ## Unit info
 

@@ -10,7 +10,7 @@ int main() {
 
     for (FileEntry entry : file.get_entries()) {
         Delivery delivery = Delivery::from_entry(entry);
-            cout << delivery.getVolume() << ' ' << delivery.getWeight() << ' ' << delivery.getReward() << ' ' << delivery.getDuration() << endl;
+            cout << delivery.get_volume() << ' ' << delivery.get_weight() << ' ' << delivery.get_reward() << ' ' << delivery.get_duration() << endl;
     }
 
 

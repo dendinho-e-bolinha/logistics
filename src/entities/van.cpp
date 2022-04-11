@@ -16,14 +16,14 @@ Van Van::from_entry(std::vector<std::string> entry) {
     return Van{max_volume, max_weight, daily_cost};
 }
 
-int Van::getMaxVolume() const {
+int Van::get_max_volume() const {
     return max_volume;
 }
 
-int Van::getMaxWeight() const {
+int Van::get_max_weight() const {
     return max_weight;
 }
 
-int Van::getDailyCost() const {
+int Van::get_daily_cost() const {
     return daily_cost;
 }

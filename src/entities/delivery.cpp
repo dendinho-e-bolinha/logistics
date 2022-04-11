@@ -18,18 +18,18 @@ Delivery Delivery::from_entry(std::vector<std::string> entry) {
     return Delivery(volume, weight, reward, duration);
 }
 
-int Delivery::getVolume() const {
+int Delivery::get_volume() const {
     return volume;
 }
 
-int Delivery::getWeight() const {
+int Delivery::get_weight() const {
     return weight;
 }
 
-int Delivery::getReward() const {
+int Delivery::get_reward() const {
     return reward;
 }
 
-int Delivery::getDuration() const {
+int Delivery::get_duration() const {
     return duration;
 }

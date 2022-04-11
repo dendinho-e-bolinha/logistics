@@ -7,7 +7,7 @@
 using namespace std;
 
 Delivery::Delivery(int volume, int weight, int reward, int duration)
-    : volume(volume), weight(weight), reward(reward), duration(duration) {}
+    : volume(volume), weight(weight), reward(reward), duration(duration), selected_driver(-1) {}
 
 Delivery Delivery::from_entry(std::vector<std::string> entry) {
     int volume = stoi(entry.at(0));

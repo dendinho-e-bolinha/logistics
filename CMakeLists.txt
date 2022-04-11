@@ -9,7 +9,7 @@ add_executable(logistics
     main.cpp
     src/dataset.cpp
     src/entities/delivery.cpp
-    src/entities/van.cpp
+    src/entities/driver.cpp
 )
 
 find_package(Doxygen)

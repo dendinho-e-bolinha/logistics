@@ -19,4 +19,7 @@ public:
     int get_weight() const;
     int get_reward() const;
     int get_duration() const;
+
+    // Search results
+    int selected_driver;
 };

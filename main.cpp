@@ -57,8 +57,10 @@ int main() {
         { 10, 10, 50, 1 }
     };
 
-    cout << two_dim_knapsack(babyDriver, babyIpad, [](Delivery delivery, Driver driver) {
+    auto entry = two_dim_knapsack(babyDriver, babyIpad, [](Delivery delivery, Driver driver) {
         return delivery.get_reward();
-    }) << endl;
+    });
+
+    cout << entry.n << endl << entry.reward << endl << entry.weight << endl << entry.volume << endl << entry.duration << endl;
 
 }

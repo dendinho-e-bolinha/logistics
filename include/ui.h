@@ -2,24 +2,32 @@
 
 #include "entities/delivery.h"
 #include "entities/driver.h"
+#include "interact.h"
 
 #include <vector>
 #include <string>
 
 class UI {
-    std::string file;
+    std::string drivers_file;
+    std::string deliveries_file;
+
     bool scenario1 = false;
-    bool sceanrio2 = false;
+    bool scenario2 = false;
     bool scenario3 = false;
+
+    // TODO: Implement features late
     bool transfer = false;
     bool efficacy = false;
+
+    std::vector<Delivery> deliveries;
+    std::vector<Driver> drivers;
 
     /**
      * @brief Lets the user pick the file where to get the data from
      * 
-     * @return string containing the user's choice
+     * @return true if the file exists, false otherwise
      */
-    string choose_file_menu();
+    std::string choose_file_menu(std::string);
 
     /**
      * @brief Gets the scenario the user chose
@@ -34,6 +42,9 @@ class UI {
      * @return Menu 
      */
     Menu get_extras_menu();
+
+
+    void show_selection();
 
     public:
         /**

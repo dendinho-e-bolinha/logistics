@@ -10,6 +10,11 @@ add_executable(logistics
     src/dataset.cpp
     src/entities/delivery.cpp
     src/entities/driver.cpp
+    src/interact.cpp
+    src/scenario1.cpp
+    src/scenario2.cpp
+    src/scenario3.cpp
+    src/ui.cpp
 )
 
 find_package(Doxygen)

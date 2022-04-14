@@ -58,3 +58,25 @@ vector<string> File::get_columns() const {
 vector<FileEntry> File::get_entries() const {
     return entries;    
 }
+
+vector<Delivery> File::read_deliveries() const {
+    vector<Delivery> deliveries;
+
+    for (FileEntry entry : this->get_entries()) {
+        Delivery delivery = Delivery::from_entry(entry);
+        deliveries.push_back(delivery);
+    }
+
+    return deliveries;
+}
+
+vector<Driver> File::read_drivers() const {
+    vector<Driver> drivers;
+    
+    for (FileEntry entry : this->get_entries()) {
+        Driver driver = Driver::from_entry(entry);
+        drivers.push_back(driver);
+    }
+
+    return drivers;
+}

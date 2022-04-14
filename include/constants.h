@@ -2,6 +2,8 @@
 
 #include <string>
 
-const std::string VAN_FILE_PATH = "../dataset/carrinhas.txt";
+const std::string DATASET_PATH = "../dataset/";
 
-const std::string DELIVERIES_FILE_PATH = "../dataset/encomendas.txt";
+const std::string VAN_FILE_PATH = DATASET_PATH + "carrinhas.txt";
+
+const std::string DELIVERIES_FILE_PATH = DATASET_PATH + "encomendas.txt";

@@ -3,12 +3,11 @@
 #include <string.h>
 #include <algorithm>
 
-#include "entities/delivery.h"
-#include "entities/driver.h"
+#include "scenario3.h"
 
 using namespace std;
 
-float solve(vector<Delivery> &deliveries) {
+float scenario3::solve(vector<Delivery> &deliveries) {
     sort(deliveries.begin(), deliveries.end(), [](Delivery &delivery1, Delivery &delivery2) {
         return delivery1.get_duration() < delivery2.get_duration();
     });

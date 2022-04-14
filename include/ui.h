@@ -19,8 +19,14 @@ class UI {
     bool transfer = false;
     bool efficacy = false;
 
+    bool verbose_mode = false;
+
     std::vector<Delivery> deliveries;
     std::vector<Driver> drivers;
+
+    std::vector<Delivery> currentDeliveries;
+    std::vector<Driver> currentDrivers;
+
 
     /**
      * @brief Lets the user pick the file where to get the data from
@@ -51,4 +57,7 @@ class UI {
          * @brief Displays the menu
          */
         void start();
+
+        UI(std::string verbose_mode);
+        UI();
 };

@@ -15,6 +15,14 @@
 
 using namespace std;
 
+
+UI::UI(string verbose_mode) {
+    if (verbose_mode == "-v")
+        this->verbose_mode = true;
+}
+
+UI::UI(){}
+
 void UI::start() {
     this->drivers_file = choose_file_menu("drivers");
     this->deliveries_file = choose_file_menu("deliveries");
@@ -68,51 +76,63 @@ string UI::choose_file_menu(string choice) {
 
 void UI::show_selection() {
 
-    int selected_drivers = count_if(drivers.begin(), drivers.end(), [](Driver &driver){
+    int selected_drivers = count_if(currentDrivers.begin(), currentDrivers.end(), [](Driver &driver){
         return driver.is_selected == true;
     });
 
     int total_drivers = drivers.size();
 
-    int delivered_orders = count_if(deliveries.begin(), deliveries.end(), [](Delivery &delivery){
+    int delivered_orders = count_if(currentDeliveries.begin(), currentDeliveries.end(), [](Delivery &delivery){
         return delivery.selected_driver != -1;
     });
 
-    int total_orders = deliveries.size();
+    int total_orders = currentDeliveries.size();
 
     int money_won = 0, money_spent = 0;
 
-    for (int i = 0; i < this->drivers.size(); ++i) {
-        Driver &driver = this->drivers.at(i);
-        cout << "\nNumber: " << i << "\nSelected: " << boolalpha << driver.is_selected << "\n"; 
+    for (int i = 0; i < this->currentDrivers.size(); ++i) {
+        Driver &driver = this->currentDrivers.at(i);
+        if (verbose_mode)
+            cout << "\nNumber: " << i << "\nSelected: " << boolalpha << driver.is_selected << "\n"; 
         if (driver.is_selected) {
             money_spent += driver.get_daily_cost();
-            cout << "Volume: " << driver.current_volume << " / " << driver.get_max_volume() << '\n'
-                << "Weight: " << driver.current_weight << " / " << driver.get_max_weight() << '\n'
-                << "Duration: " << driver.minutes_used << " / " << (24 * 60) << '\n';
-        } else break;
-    }
 
-    for (int i = 0; i < this->deliveries.size(); ++i) {
-        Delivery &delivery = this->deliveries.at(i);
-        cout << "\nNumber: " << i << "\nSelected: " << boolalpha << (delivery.selected_driver != -1) << '\n'; 
-        if (delivery.selected_driver != -1) {
-            money_won += delivery.get_reward();
-            cout << "Driver: " << delivery.selected_driver << '\n';
+            if (verbose_mode)
+                cout << "Volume: " << driver.current_volume << " / " << driver.get_max_volume() << '\n'
+                    << "Weight: " << driver.current_weight << " / " << driver.get_max_weight() << '\n'
+                    << "Duration: " << driver.minutes_used << " / " << (24 * 60) << '\n';
+
         }
     }
 
-    cout << setw(7) << "Delivered orders" << setw(25) << "Undelivered Orders" << setw(25) << "Total orders"
-     << endl;
+    for (int i = 0; i < this->currentDeliveries.size(); ++i) {
+        Delivery &delivery = this->currentDeliveries.at(i);
+        if (verbose_mode)
+            cout << "\nNumber: " << i << "\nSelected: " << boolalpha << (delivery.selected_driver != -1) << '\n'; 
+        if (delivery.selected_driver != -1) {
+            money_won += delivery.get_reward();
+            if (verbose_mode)
+                cout << "Driver: " << delivery.selected_driver << "\n\n";
+        }
+    }
+
+    cout << ((verbose_mode) ? "\x1B[2J\x1B[;H" : "\n\x1B[3J\x1B[2J\x1B[;H")
+         << setfill('-') << setw(33) << "Statistics" << setw(33) << "-" << endl << endl;
+
+    cout << setfill(' ') << setw(7) << "Delivered orders" << setw(25) << "Undelivered Orders" << setw(25) << "Total orders" << endl;
+
     cout << setw(7) << delivered_orders << setw(25) << total_orders - delivered_orders << setw(25) << total_orders
      << endl << endl;
 
     cout << setw(7) << "Selected drivers" << setw(25) << "Unselected drivers" << setw(25) << "Total drivers"
      << endl;
-    cout << setw(7) << selected_drivers << setw(25) << total_drivers - selected_drivers << setw(25) << total_drivers
-     << endl;
 
-    cout << setw(7) << "Total profit: " << money_won - money_spent << endl;
+    cout << setw(7) << selected_drivers << setw(25) << total_drivers - selected_drivers << setw(25) << total_drivers
+     << endl << endl;
+
+    cout << "Money won: " << money_won << "€" << endl 
+         << "Money spent: " << money_spent << "€" << endl
+         << setw(7) << "Total profit: " << money_won - money_spent << "€" << endl;
 }
 
 Menu UI::get_scenario_menu() {
@@ -120,15 +140,15 @@ Menu UI::get_scenario_menu() {
 
     MenuBlock scenario_options;
     
-    scenario_options.add_option("[Cenário 1] Minimizar o número de estafetas utilizado, entregando o maior número de pedidos", [this]() {
+    scenario_options.add_option("[Scenario 1] Minimize the number of drivers used by delivering the largest number of orders", [this]() {
         this->scenario1 = true;
     });
 
-    scenario_options.add_option("[Cenário 2] Maximizar o lucro da empresa", [this]() {
+    scenario_options.add_option("[Scenario 2] Maximize the company profit", [this]() {
         this->scenario2 = true;
     });
 
-    scenario_options.add_option("[Cenário 3] Maximizar o número de entregas expresso em 8 horas de trabalho", [this]() {
+    scenario_options.add_option("[Scenario 3] Maximize the number of express deliveries per day of work", [this]() {
         this->scenario3 = true;
     });
 
@@ -141,39 +161,61 @@ Menu UI::get_extras_menu() { // should be able to select more than one? update d
 
     MenuBlock extra_options;
 
-    extra_options.add_option("Transferir pedidos não entregues num dia para o dia seguinte", [this]() {
+    extra_options.add_option("Transfer undelivered orders one day to the next day", [this]() {
         this->transfer = true;
 
-        if (this->scenario1)
-            scenario1::solve(this->drivers, this->deliveries); 
-        //else if (this->scenario2)
-            //scenario2::solve(this->drivers, this->deliveries); 
-        else if (this->scenario3)
-            scenario3::solve(this->deliveries);
+        if (this->scenario1) {
+            this->currentDrivers = this->drivers;
+            this->currentDeliveries = this->deliveries;
+            scenario1::solve(this->currentDrivers, this->currentDeliveries); 
+        } //else if (this->scenario2) {
+            //this->currentDeliveries = this->deliveries;
+            //this->currentDrivers = this->drivers;
+            //scenario2::solve(this->currentDrivers, this->currentDeliveries); 
+        //} 
+        else if (this->scenario3) {
+            this->currentDeliveries = this->deliveries;
+            scenario3::solve(this->currentDeliveries);
+        }
 
         this->show_selection();
     });
 
-    extra_options.add_option("Medir eficiência da operação (número de pedidos entregues / número de pedidos enviados)", [this]() {
+    extra_options.add_option("Measure operation efficiency (number of orders delivered / number of orders shipped)", [this]() {
         this->efficacy = true;
 
-        if (this->scenario1)
-            scenario1::solve(this->drivers, this->deliveries); 
-        //else if (this->scenario2)
-            //scenario2::solve(this->drivers, this->deliveries); 
-        else if (this->scenario3)
-            scenario3::solve(this->deliveries);
+        if (this->scenario1) {
+            this->currentDrivers = this->drivers;
+            this->currentDeliveries = this->deliveries;
+            scenario1::solve(this->currentDrivers, this->currentDeliveries); 
+        } //else if (this->scenario2) {
+            //this->currentDeliveries = this->deliveries;
+            //this->currentDrivers = this->drivers;
+            //scenario2::solve(this->currentDrivers, this->currentDeliveries); 
+        //} 
+        else if (this->scenario3) {
+            this->currentDeliveries = this->deliveries;
+            scenario3::solve(this->currentDeliveries);
+        }
 
         this->show_selection();
     });
 
     extra_options.add_option("None", [this](){
-        if (this->scenario1)
-            scenario1::solve(this->drivers, this->deliveries); 
-        //else if (this->scenario2)
-            //scenario2::solve(this->drivers, this->deliveries); 
-        else if (this->scenario3)
-            scenario3::solve(this->deliveries);
+
+        if (this->scenario1) {
+            this->currentDrivers = this->drivers;
+            this->currentDeliveries = this->deliveries;
+            scenario1::solve(this->currentDrivers, this->currentDeliveries); 
+        } //else if (this->scenario2) {
+            //this->currentDeliveries = this->deliveries;
+            //this->currentDrivers = this->drivers;
+            //scenario2::solve(this->currentDrivers, this->currentDeliveries); 
+        //} 
+        else if (this->scenario3) {
+            this->currentDeliveries = this->deliveries;
+            scenario3::solve(this->currentDeliveries);
+        }
 
         this->show_selection();
     });

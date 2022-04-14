@@ -17,6 +17,8 @@ void scenario1::solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
         return;
     }
 
+
+
     int selected_until = 0;
     for (Delivery &delivery : deliveries) {
         int fits_in = -1;

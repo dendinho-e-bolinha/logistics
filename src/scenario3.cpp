@@ -8,6 +8,7 @@
 using namespace std;
 
 float scenario3::solve(vector<Delivery> &deliveries) {
+
     sort(deliveries.begin(), deliveries.end(), [](Delivery &delivery1, Delivery &delivery2) {
         return delivery1.get_duration() < delivery2.get_duration();
     });

@@ -46,7 +46,7 @@ int main() {
     //     }
     // }
 
-    Driver babyDriver(60, 60, 12);
+    Driver babyDriver(6, 6, 12);
     vector<Delivery> babyIpad = { 
         { 2, 2, 51, 4 }, //
         { 3, 3, 12, 3 },

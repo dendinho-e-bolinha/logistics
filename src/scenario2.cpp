@@ -85,14 +85,19 @@ int two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, CostFunction 
     int VL = driver.get_max_volume();
     int TL = DAY_OF_WORK;
 
-    vector<vector<vector<vector<int>>>> reward(
-        N + 1,
-        vector<vector<vector<int>>>(
-            WL + 1,
-            vector<vector<int>>(
-                VL + 1,
-                vector<int>(TL + 1, 0)
-            )
+    vector<vector<vector<int>>> previousReward(
+        WL + 1,
+        vector<vector<int>>(
+            VL + 1,
+            vector<int>(TL + 1, 0)
+        )
+    );
+
+    vector<vector<vector<int>>> reward(
+        WL + 1,
+        vector<vector<int>>(
+            VL + 1,
+            vector<int>(TL + 1, 0)
         )
     );
 
@@ -116,6 +121,8 @@ int two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, CostFunction 
         int itemVolume = delivery.get_volume();
         int itemDuration = delivery.get_duration();
         int itemReward = cost_fun(delivery, driver);
+
+        previousReward = reward;
         
         for (int currWeight = 1; currWeight <= WL; currWeight++) {
             for (int currVolume = 1; currVolume <= VL; currVolume++) {
@@ -125,30 +132,31 @@ int two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, CostFunction 
                     int durationLeft = currDuration - itemDuration;
                     bool canFit = weightLeft >= 0 && volumeLeft >= 0 && durationLeft >= 0;
 
-                    int currentReward = reward[realIndex][currWeight][currVolume][currDuration];
+                    int currentReward = previousReward[currWeight][currVolume][currDuration];
                     if (canFit) {
                         // In this case, we can add the item to the knapsack
                         // so we test if it is worth it
 
-                        int possibleReward = reward[realIndex][weightLeft][volumeLeft][durationLeft] + itemReward;
+                        int possibleReward = previousReward[weightLeft][volumeLeft][durationLeft] + itemReward;
                         if (possibleReward > currentReward) {
-                            reward[i][currWeight][currVolume][currDuration] = possibleReward;
+                            reward[currWeight][currVolume][currDuration] = possibleReward;
                             chosen[i][currWeight][currVolume][currDuration] = realIndex;
                             continue;
                         }
                     }
                     
-                    reward[i][currWeight][currVolume][currDuration] = currentReward;
+                    reward[currWeight][currVolume][currDuration] = currentReward;
                     chosen[i][currWeight][currVolume][currDuration] = chosen[realIndex][currWeight][currVolume][currDuration];
                 }
             }
         }
     }
 
+    int k = reward[WL][VL][TL];
 
     vector<Delivery> best;
-    for (; N > 0 && WL > 0 && VL > 0 && TL > 0;) {
-        int index = chosen[N][WL][VL][TL];
+    int index;
+    while (N > 0 && WL > 0 && VL > 0 && TL > 0 && (index = chosen[N][WL][VL][TL]) >= 0) {
         Delivery item = deliveries.at(index);
         best.push_back(item);
 
@@ -162,7 +170,7 @@ int two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, CostFunction 
         cout << d.get_volume() << " " << d.get_weight() << " " << d.get_reward() << endl; 
     }
 
-    return reward[N][WL][VL][TL];
+    return k;
 
     // for (auto i : vec)
     //     for (auto j : i)

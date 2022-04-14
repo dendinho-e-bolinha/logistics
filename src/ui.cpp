@@ -11,6 +11,7 @@
 #include <list>
 #include <set>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -66,23 +67,52 @@ string UI::choose_file_menu(string choice) {
 }
 
 void UI::show_selection() {
-    for (int i = 0; i < this->drivers.size(); i++) {
+
+    int selected_drivers = count_if(drivers.begin(), drivers.end(), [](Driver &driver){
+        return driver.is_selected == true;
+    });
+
+    int total_drivers = drivers.size();
+
+    int delivered_orders = count_if(deliveries.begin(), deliveries.end(), [](Delivery &delivery){
+        return delivery.selected_driver != -1;
+    });
+
+    int total_orders = deliveries.size();
+
+    int money_won = 0, money_spent = 0;
+
+    for (int i = 0; i < this->drivers.size(); ++i) {
         Driver &driver = this->drivers.at(i);
         cout << "\nNumber: " << i << "\nSelected: " << boolalpha << driver.is_selected << "\n"; 
         if (driver.is_selected) {
+            money_spent += driver.get_daily_cost();
             cout << "Volume: " << driver.current_volume << " / " << driver.get_max_volume() << '\n'
                 << "Weight: " << driver.current_weight << " / " << driver.get_max_weight() << '\n'
                 << "Duration: " << driver.minutes_used << " / " << (24 * 60) << '\n';
         } else break;
     }
 
-    for (int i = 0; i < this->deliveries.size(); i++) {
+    for (int i = 0; i < this->deliveries.size(); ++i) {
         Delivery &delivery = this->deliveries.at(i);
         cout << "\nNumber: " << i << "\nSelected: " << boolalpha << (delivery.selected_driver != -1) << '\n'; 
         if (delivery.selected_driver != -1) {
+            money_won += delivery.get_reward();
             cout << "Driver: " << delivery.selected_driver << '\n';
         }
     }
+
+    cout << setw(7) << "Delivered orders" << setw(25) << "Undelivered Orders" << setw(25) << "Total orders"
+     << endl;
+    cout << setw(7) << delivered_orders << setw(25) << total_orders - delivered_orders << setw(25) << total_orders
+     << endl << endl;
+
+    cout << setw(7) << "Selected drivers" << setw(25) << "Unselected drivers" << setw(25) << "Total drivers"
+     << endl;
+    cout << setw(7) << selected_drivers << setw(25) << total_drivers - selected_drivers << setw(25) << total_drivers
+     << endl;
+
+    cout << setw(7) << "Total profit: " << money_won - money_spent << endl;
 }
 
 Menu UI::get_scenario_menu() {

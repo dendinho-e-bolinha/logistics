@@ -24,12 +24,13 @@ struct KnapsackEntry {
 };
 
 template <typename CostFunction>
-KnapsackEntry two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, CostFunction cost_fun) {
+KnapsackEntry two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, CostFunction cost_fun, int available_index) {
     int N = deliveries.size();
     int WL = driver.get_max_weight();
     int VL = driver.get_max_volume();
     int TL = DAY_OF_WORK;
 
+    cout << "(#" << available_index << ") started" << endl;
     vector<vector<vector<KnapsackEntry>>> reward(
         WL + 1,
         vector<vector<KnapsackEntry>>(
@@ -37,6 +38,8 @@ KnapsackEntry two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, Cos
             vector<KnapsackEntry>(TL + 1, { 0, 0, 0, 0, 0 })
         )
     );
+
+    cout << "(#" << available_index << ") allocated" << endl;
 
     vector<vector<vector<KnapsackEntry>>> previousReward = reward;
 
@@ -84,6 +87,8 @@ KnapsackEntry two_dim_knapsack(Driver &driver, vector<Delivery> &deliveries, Cos
             }
         }
     }
+    
+    cout << "(#" << available_index << ") solution found" << endl;
 
     return reward[WL][VL][TL];
 }
@@ -96,7 +101,7 @@ int compareToEntry(const Driver &driver, const vector<vector<Delivery>::iterator
     int sumDuration = 0;
     for (auto it : iterators) {
         sumReward += cost_fun(*it, driver);
-        sumWeight += it->get_duration();
+        sumWeight += it->get_weight();
         sumVolume += it->get_volume();
         sumDuration += it->get_duration();
     }
@@ -128,9 +133,54 @@ int compareToEntry(const Driver &driver, const vector<vector<Delivery>::iterator
     }
 }
 
+bool decreaseIterators(const vector<Delivery> &deliveries, vector<vector<Delivery>::iterator> &iterators, int index = 0) {
+    if (index == iterators.size()) {
+        return true;
+    }
+
+    bool success = true;
+
+    if (index == 0) {
+
+        auto &it = iterators.front();
+        if (it == deliveries.begin()) {
+            if (iterators.size() > 1) {
+                success = decreaseIterators(deliveries, iterators, 1);
+                it = iterators.at(1) - 1;
+            }
+        } else {
+            it--;
+        }
+        
+    } else if (index == iterators.size() - 1) {
+
+        auto &it = iterators.back();
+        if (it == iterators.at(index - 1) + 1) {
+            success = false;
+        } else {
+            it--;
+        }
+
+    } else {
+
+        auto &it = iterators.at(index);
+        if (it == iterators.at(index - 1) + 1) {
+            success = decreaseIterators(deliveries, iterators, index + 1);
+            it = iterators.at(index + 1) - 1;
+        } else {
+            it--;
+        }
+
+    }
+
+    return success;
+}
+
 template <typename CostFunction>
-vector<Delivery> find_deliveries(Driver &driver, vector<Delivery> &deliveries, KnapsackEntry entry, CostFunction cost_fun) {
-    sort(deliveries.begin(), deliveries.end(), [&driver](Delivery &d1, Delivery &d2) {
+vector<Delivery> find_deliveries(Driver &driver, vector<Delivery> deliveries, KnapsackEntry entry, CostFunction cost_fun, int available_index) {
+    cout << "(#" << available_index << ") started search" << endl;
+
+    sort(deliveries.begin(), deliveries.end(), [&driver, &cost_fun](Delivery &d1, Delivery &d2) {
         int cost1 = cost_fun(d1, driver);
         int cost2 = cost_fun(d2, driver);
         return cost1 < cost2 || (cost1 == cost2 && d1.get_weight() < d2.get_weight()) || (d1.get_weight() == d2.get_weight() && d1.get_volume() < d2.get_volume()) || (d1.get_volume() == d2.get_volume() && d1.get_duration() < d2.get_duration());
@@ -152,7 +202,7 @@ vector<Delivery> find_deliveries(Driver &driver, vector<Delivery> &deliveries, K
             break;
         }
 
-        for (auto it : iterators) {
+        for (auto &it : iterators) {
             it++;
         }
     }
@@ -164,15 +214,19 @@ vector<Delivery> find_deliveries(Driver &driver, vector<Delivery> &deliveries, K
         return result;
     } 
     
-    if (comparison == 0) {
-        for (auto it : iterators) {
-            result.push_back(*it);
+    while (true) {
+        if (comparison == 0) {
+            for (auto it : iterators) {
+                result.push_back(*it);
+            }
+
+            return result;
         }
 
-        return result;
-    }
+        if (!decreaseIterators(deliveries, iterators)) {
+            return result;
+        }
 
-    while (true) {
-        
+        comparison = compareToEntry(driver, iterators, entry, cost_fun);
     }
 }

@@ -3,6 +3,7 @@
 #include "dataset.h"
 #include "entities/delivery.h"
 #include <vector>
+#include <thread>
 
 #include "src/scenario2.cpp"
 
@@ -46,21 +47,50 @@ int main() {
     //     }
     // }
 
-    Driver babyDriver(6, 6, 12);
-    vector<Delivery> babyIpad = { 
-        { 2, 2, 51, 4 }, //
-        { 3, 3, 12, 3 },
-        { 4, 4, 100, 1 }, 
-        { 6, 6, 67, 1 }, //
-        { 8, 8, 1, 300 }, 
-        { 12, 12, 49, 1 }, //
-        { 10, 10, 50, 1 }
-    };
+    // Driver babyDriver(6, 6, 12);
+    // vector<Delivery> babyIpad = { 
+    //     { 2, 2, 51, 4 }, //
+    //     { 3, 3, 12, 3 },
+    //     { 4, 4, 100, 1 }, 
+    //     { 6, 6, 67, 1 }, //
+    //     { 8, 8, 1, 300 }, 
+    //     { 12, 12, 49, 1 }, //
+    //     { 10, 10, 50, 1 }
+    // };
 
-    auto entry = two_dim_knapsack(babyDriver, babyIpad, [](Delivery delivery, Driver driver) {
-        return delivery.get_reward();
-    });
+    bool running[1];
+    for (int i = 0; i < sizeof(running); i++) {
+        running[i] = false;
+    }
 
-    cout << entry.n << endl << entry.reward << endl << entry.weight << endl << entry.volume << endl << entry.duration << endl;
+    for (Driver &driver : drivers) {
+        int available_index;
+        while (running[available_index]) {
+            available_index++;
+            available_index %= sizeof(running);
+        }
 
+        running[available_index] = true;
+        thread t([&running, available_index, &driver, &deliveries]() {
+
+            cout << "\n\n\n\n\n";
+            auto entry = two_dim_knapsack(driver, deliveries, [](Delivery delivery, Driver driver) {
+                return delivery.get_reward();
+            }, available_index);
+
+            cout << "(#" << available_index << ") " << entry.n << ' ' << entry.reward << ' ' << entry.weight << ' ' << entry.volume << ' ' << entry.duration << endl << endl;
+
+            auto de = find_deliveries(driver, deliveries, entry, [](Delivery delivery, Driver driver) {
+                return delivery.get_reward();
+            }, available_index);
+
+            for (auto d : de) {
+                cout << "(#" << available_index << ") " << d.get_volume() << ' ' << d.get_weight() << ' ' << d.get_reward() << ' ' << d.get_duration() << endl;
+            }
+
+            running[available_index] = false;
+        });
+
+        t.detach();
+    }
 }

@@ -2,10 +2,11 @@
 #include "constants.h"
 #include "dataset.h"
 #include "entities/delivery.h"
+#include "entities/driver.h"
 #include <vector>
 #include <thread>
 
-#include "src/scenario2.cpp"
+#include "src/knapsack.cpp"
 
 using namespace std;
 
@@ -58,39 +59,45 @@ int main() {
     //     { 10, 10, 50, 1 }
     // };
 
-    bool running[1];
-    for (int i = 0; i < sizeof(running); i++) {
-        running[i] = false;
-    }
+    SparseBoobacube boobacube;
+    knapsack(boobacube, deliveries, deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60);
 
-    for (Driver &driver : drivers) {
-        int available_index;
-        while (running[available_index]) {
-            available_index++;
-            available_index %= sizeof(running);
-        }
+    cout << boobacube.at({ deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60 }) << endl;
 
-        running[available_index] = true;
-        thread t([&running, available_index, &driver, &deliveries]() {
 
-            cout << "\n\n\n\n\n";
-            auto entry = two_dim_knapsack(driver, deliveries, [](Delivery delivery, Driver driver) {
-                return delivery.get_reward();
-            }, available_index);
+    // bool running[1];
+    // for (int i = 0; i < sizeof(running); i++) {
+    //     running[i] = false;
+    // }
 
-            cout << "(#" << available_index << ") " << entry.n << ' ' << entry.reward << ' ' << entry.weight << ' ' << entry.volume << ' ' << entry.duration << endl << endl;
+    // for (Driver &driver : drivers) {
+    //     int available_index;
+    //     while (running[available_index]) {
+    //         available_index++;
+    //         available_index %= sizeof(running);
+    //     }
 
-            auto de = find_deliveries(driver, deliveries, entry, [](Delivery delivery, Driver driver) {
-                return delivery.get_reward();
-            }, available_index);
+    //     running[available_index] = true;
+    //     thread t([&running, available_index, &driver, &deliveries]() {
 
-            for (auto d : de) {
-                cout << "(#" << available_index << ") " << d.get_volume() << ' ' << d.get_weight() << ' ' << d.get_reward() << ' ' << d.get_duration() << endl;
-            }
+    //         cout << "\n\n\n\n\n";
+    //         auto entry = two_dim_knapsack(driver, deliveries, [](Delivery delivery, Driver driver) {
+    //             return delivery.get_reward();
+    //         }, available_index);
 
-            running[available_index] = false;
-        });
+    //         cout << "(#" << available_index << ") " << entry.n << ' ' << entry.reward << ' ' << entry.weight << ' ' << entry.volume << ' ' << entry.duration << endl << endl;
 
-        t.detach();
-    }
+    //         auto de = find_deliveries(driver, deliveries, entry, [](Delivery delivery, Driver driver) {
+    //             return delivery.get_reward();
+    //         }, available_index);
+
+    //         for (auto d : de) {
+    //             cout << "(#" << available_index << ") " << d.get_volume() << ' ' << d.get_weight() << ' ' << d.get_reward() << ' ' << d.get_duration() << endl;
+    //         }
+
+    //         running[available_index] = false;
+    //     });
+
+    //     t.detach();
+    // }
 }

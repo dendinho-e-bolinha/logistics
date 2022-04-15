@@ -13,6 +13,8 @@ add_executable(logistics
     # src/ui.cpp
     src/entities/delivery.cpp
     src/entities/driver.cpp
+    src/sparse_boobacube.cpp
+    # src/knapsack.cpp
     # src/scenario1.cpp
     # src/scenario2.cpp
     # src/scenario3.cpp

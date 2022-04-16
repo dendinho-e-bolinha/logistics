@@ -3,7 +3,7 @@
 
 using namespace std;
 
-#define WORK_TIME (16 * 60)
+#define WORK_TIME (8 * 60)
 
 RewardOptimization::RewardOptimization(const vector<Driver> &drivers,
                                        const vector<Delivery> &deliveries)
@@ -98,18 +98,11 @@ void RewardOptimization::solve() {
           delivery.selected_driver == -1
               ? delivery.get_normal_reward()
               : drivers.at(delivery.selected_driver).get_daily_cost();
-
-        // cout << "Search Reward: " << delivery.search_reward << endl;
     }
-
-    // cout << "Daily cost: " << driver.get_daily_cost() << endl;
 
     knapsack(driver);
 
-    cout << "Reward: " << getReward(driver) << endl;
-
     if (getReward(driver) - driver.get_daily_cost() > 0) {
-        cout << "Profit!" << endl;
         auto selectedDeliveries = getSelectedDeliveries(driver);
         for (auto it : selectedDeliveries) {
             it->selected_driver = i;

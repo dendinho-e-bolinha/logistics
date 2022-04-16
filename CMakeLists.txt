@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.20.2)
 project(logistics)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -g -fsanitize=address -fsanitize=undefined -pthread")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -fsanitize=address -fsanitize=undefined -pthread")
-
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -g")
+# -g -fsanitize=address -fsanitize=undefined -pthread
 include_directories(include)
 
 add_executable(logistics

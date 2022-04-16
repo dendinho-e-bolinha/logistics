@@ -45,7 +45,7 @@ void firstFit(int blockSize[], int m, int processSize[], int n) {
 bool can_delivery_fit(const Delivery &delivery, const Driver &driver) {
     return driver.current_volume + delivery.get_volume() <= driver.get_max_volume()
         && driver.current_weight + delivery.get_weight() <= driver.get_max_weight()
-        && driver.minutes_used + delivery.get_duration() <= 24 * 3600;
+        && driver.minutes_used + delivery.get_minutes() <= 24 * 3600;
 }
 
 void solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
@@ -90,7 +90,7 @@ void solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
 
                 drivers.at(selected_until).current_volume += delivery.get_volume();
                 drivers.at(selected_until).current_weight += delivery.get_weight();
-                drivers.at(selected_until).minutes_used += delivery.get_duration();
+                drivers.at(selected_until).minutes_used += delivery.get_minutes();
 
                 selected_until++;
             }
@@ -101,7 +101,7 @@ void solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
             Driver &selected_driver = drivers.at(fits_in);
             selected_driver.current_volume += delivery.get_volume();
             selected_driver.current_weight += delivery.get_weight();
-            selected_driver.minutes_used += delivery.get_duration();
+            selected_driver.minutes_used += delivery.get_minutes();
         }
     }
 }

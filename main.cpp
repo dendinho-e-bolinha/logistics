@@ -11,6 +11,7 @@
 using namespace std;
 
 int main() {
+    srand(time(NULL)); rand();
     File file(DELIVERIES_FILE_PATH);
     vector<Delivery> deliveries;
 
@@ -112,18 +113,22 @@ int main() {
         profits[i] -= drivers[i].get_daily_cost();
     }
 
+
     for (Delivery &delivery : opt.getDeliveries()) {
         if (delivery.selected_driver != -1) {
+            cout << "Delivered" << endl;
             profits[delivery.selected_driver] += delivery.get_normal_reward();
+        } else {
+            cout << "Not delivered" << endl;
         }
     }
 
     int sum = 0;
     for (int i = 0; i < profits.size(); i++) {
-        if (profits[i] != -drivers[i].get_daily_cost()) {
-            sum += profits[i];
+        // if (profits[i] != -drivers[i].get_daily_cost()) {
+            // sum += profits[i];
             cout << profits[i] << endl;
-        }
+        // }
     }
 
     cout << endl << endl << sum << endl;

@@ -11,6 +11,7 @@ class RewardOptimization {
     std::vector<Delivery> deliveries;
 
     SparseBoobacube boobacube;
+    int frozenDeliveries;
 
     void knapsack(int n, int wl, int vl, int tl);
     void knapsack(const Driver &driver);
@@ -20,6 +21,9 @@ class RewardOptimization {
 
     int getReward(int n, int wl, int vl, int tl);
     int getReward(const Driver &driver);
+
+    void randomizeDeliveries();
+    void freezeDelivery(std::vector<Delivery>::iterator it);
 
     public:
         RewardOptimization(const std::vector<Driver> &drivers, const std::vector<Delivery> &deliveries);

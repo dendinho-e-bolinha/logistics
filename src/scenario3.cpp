@@ -10,7 +10,7 @@ using namespace std;
 
 float solve(vector<Delivery> &deliveries) {
     sort(deliveries.begin(), deliveries.end(), [](Delivery &delivery1, Delivery &delivery2) {
-        return delivery1.get_duration() < delivery2.get_duration();
+        return delivery1.get_minutes() < delivery2.get_minutes();
     });
 
     int average_starting_time = 0;
@@ -18,12 +18,12 @@ float solve(vector<Delivery> &deliveries) {
     int deliveries_made = 0;
     
     for (int i = 0; i < deliveries.size(); i++) {
-        if (deliveries.at(i).get_duration() <= minutes_remaining) {
-            average_starting_time += average_starting_time + deliveries.at(i).get_duration();
-            minutes_remaining -= deliveries.at(i).get_duration();
+        if (deliveries.at(i).get_minutes() <= minutes_remaining) {
+            average_starting_time += average_starting_time + deliveries.at(i).get_minutes();
+            minutes_remaining -= deliveries.at(i).get_minutes();
             deliveries_made++;
-            if (minutes_remaining < deliveries.at(i).get_duration()) {
-                average_starting_time -= deliveries.at(i).get_duration();
+            if (minutes_remaining < deliveries.at(i).get_minutes()) {
+                average_starting_time -= deliveries.at(i).get_minutes();
                 average_starting_time /= 2;
                 break;
             }

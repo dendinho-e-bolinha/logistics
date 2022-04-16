@@ -6,7 +6,7 @@
 #include <vector>
 #include <thread>
 
-#include "src/knapsack.cpp"
+#include "scenarios/reward_optimization.h"
 
 using namespace std;
 
@@ -59,10 +59,13 @@ int main() {
     //     { 10, 10, 50, 1 }
     // };
 
-    SparseBoobacube boobacube;
-    knapsack(boobacube, deliveries, deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60);
+    // SparseBoobacube boobacube;
+    // knapsack(boobacube, deliveries, deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60);
 
-    cout << boobacube.at({ deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60 }) << endl;
+    // cout << boobacube.at({ deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60 }) << endl;
+
+    // cout << boobacube.size() << endl;
+    // cout << boobacube.max_size() << endl;
 
 
     // bool running[1];
@@ -100,4 +103,28 @@ int main() {
 
     //     t.detach();
     // }
+
+    RewardOptimization opt(drivers, deliveries);
+    opt.solve();
+
+    vector<int> profits(drivers.size(), 0);
+    for (int i = 0; i < profits.size(); i++) {
+        profits[i] -= drivers[i].get_daily_cost();
+    }
+
+    for (Delivery &delivery : opt.getDeliveries()) {
+        if (delivery.selected_driver != -1) {
+            profits[delivery.selected_driver] += delivery.get_normal_reward();
+        }
+    }
+
+    int sum = 0;
+    for (int i = 0; i < profits.size(); i++) {
+        if (profits[i] != -drivers[i].get_daily_cost()) {
+            sum += profits[i];
+            cout << profits[i] << endl;
+        }
+    }
+
+    cout << endl << endl << sum << endl;
 }

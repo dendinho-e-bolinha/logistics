@@ -9,6 +9,8 @@ Driver::Driver(int max_volume, int max_weight, int daily_cost)
       is_selected(false), current_volume(0), current_weight(0),
       minutes_used(0) {}
 
+Driver::Driver(const Driver &driver) : Driver(driver.get_max_volume(), driver.get_max_weight(), driver.get_daily_cost()) {}
+
 Driver Driver::from_entry(std::vector<std::string> entry) {
   int max_volume = stoi(entry.at(0));
   int max_weight = stoi(entry.at(1));

@@ -9,7 +9,9 @@ class Driver {
     int daily_cost;
 
 public:
+
     Driver(int max_volume, int max_weight, int daily_cost);
+    Driver(const Driver &driver);
     static Driver from_entry(std::vector<std::string> entry);
 
     int get_max_volume() const;

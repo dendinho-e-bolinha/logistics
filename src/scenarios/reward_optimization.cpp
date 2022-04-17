@@ -52,6 +52,14 @@ void RewardOptimization::knapsack(const Driver &driver) {
            WORK_TIME - driver.used_seconds);
 }
 
+const vector<Driver> &RewardOptimization::getDrivers() const {
+    return drivers;
+}
+
+const vector<Delivery> &RewardOptimization::getDeliveries() const {
+    return deliveries;
+}
+
 vector<vector<Delivery>::iterator>
 RewardOptimization::getSelectedDeliveries(int n, int wl, int vl, int tl) {
   if (n == 0 || wl <= 0 || vl <= 0 || tl <= 0) {
@@ -117,12 +125,6 @@ void RewardOptimization::freezeDelivery(vector<Delivery>::iterator it) {
   *it = temp;
 
   frozenDeliveries++;
-}
-
-vector<Driver> RewardOptimization::getDrivers() const { return drivers; }
-
-vector<Delivery> RewardOptimization::getDeliveries() const {
-  return deliveries;
 }
 
 void RewardOptimization::solve() {
@@ -281,3 +283,5 @@ void RewardOptimization::solve() {
   deliveries = finishedDeliveries;
   drivers = finishedDrivers;
 }
+
+

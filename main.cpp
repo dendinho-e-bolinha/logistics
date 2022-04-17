@@ -114,7 +114,7 @@ int main() {
     }
 
 
-    for (Delivery &delivery : opt.getDeliveries()) {
+    for (const Delivery &delivery : opt.getDeliveries()) {
         if (delivery.selected_driver != -1) {
             cout << "Delivered" << endl;
             profits[delivery.selected_driver] += delivery.get_normal_reward();

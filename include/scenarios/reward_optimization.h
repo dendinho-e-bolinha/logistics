@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../sparse_boobacube.h"
+#include "sparse_boobacube.h"
 #include "../entities/delivery.h"
 #include "../entities/driver.h"
 
@@ -28,7 +28,9 @@ class RewardOptimization {
     public:
         RewardOptimization(const std::vector<Driver> &drivers, const std::vector<Delivery> &deliveries);
 
-        std::vector<Driver> getDrivers() const;
-        std::vector<Delivery> getDeliveries() const;
-        void solve();
+    const std::vector<Driver> &getDrivers() const;
+
+    const std::vector<Delivery> &getDeliveries() const;
+
+    void solve();
 };

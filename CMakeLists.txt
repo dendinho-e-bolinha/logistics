@@ -10,15 +10,12 @@ include_directories(include)
 add_executable(logistics
     main.cpp
     src/dataset.cpp
-    # src/ui.cpp
     src/entities/delivery.cpp
     src/entities/driver.cpp
-    src/sparse_boobacube.cpp
+    src/scenarios/sparse_boobacube.cpp
     src/scenarios/reward_optimization.cpp
-    # src/knapsack.cpp
-    # src/scenario1.cpp
-    # src/scenario2.cpp
-    # src/scenario3.cpp
+    src/scenarios/driver_optimization.cpp
+    src/scenarios/start_optimization.cpp
 )
 
 find_package(Doxygen)

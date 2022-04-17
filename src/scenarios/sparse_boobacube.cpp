@@ -1,4 +1,4 @@
-#include "sparse_boobacube.h"
+#include "scenarios/sparse_boobacube.h"
 
 using namespace std;
 

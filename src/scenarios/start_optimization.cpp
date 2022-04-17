@@ -6,7 +6,7 @@
 using namespace std;
 
 StartOptimization::StartOptimization(const vector<Driver> &drivers, const vector<Delivery> &deliveries) : drivers(
-        drivers), deliveries(deliveries) {}
+        drivers), deliveries(deliveries), averageStartingTime(0) {}
 
 const vector<Driver> &StartOptimization::getDrivers() const {
     return drivers;
@@ -16,29 +16,29 @@ const vector<Delivery> &StartOptimization::getDeliveries() const {
     return deliveries;
 }
 
-float StartOptimization::solve() {
+void StartOptimization::solve() {
     sort(deliveries.begin(), deliveries.end(), [](Delivery &delivery1, Delivery &delivery2) {
-        return delivery1.get_minutes() < delivery2.get_minutes();
+        return delivery1.get_seconds() < delivery2.get_seconds();
     });
 
-    int average_starting_time = 0;
-    int minutes_remaining = 480; // 9 to 5 working time
+    int available_seconds = 8 * 3600; // 9 to 5 working time (8 hours)
+    int sum_starting_time = 0;
     int deliveries_made = 0;
 
-    int i;
+    deliveries.at(0).starting_time = 0;
 
-    for (i = 0; i < deliveries.size(); ++i) {
-        if (deliveries.at(i).get_seconds() <= minutes_remaining) {
-            average_starting_time += average_starting_time + deliveries.at(i).get_seconds();
-            minutes_remaining -= deliveries.at(i).get_seconds();
-            deliveries_made++;
-            if (minutes_remaining < deliveries.at(i).get_seconds())
-                break;
+    for (int i = 1; i < deliveries.size(); ++i) {
+        Delivery &delivery = deliveries.at(i);
+        Delivery &previous_delivery = deliveries.at(i - 1);
+        
+        delivery.starting_time = previous_delivery.starting_time + previous_delivery.get_seconds();
+        if (delivery.starting_time > available_seconds) {
+            break;
         }
+
+        sum_starting_time += delivery.starting_time;
+        deliveries_made++;
     }
 
-    average_starting_time -= deliveries.at(i).get_seconds();
-    average_starting_time /= 2;
-
-    return 9 + average_starting_time / (float) deliveries_made / 60.0;  // Average in hours starting at 9am
+    averageStartingTime = 9 + sum_starting_time / ((float) (deliveries_made * 3600));
 }

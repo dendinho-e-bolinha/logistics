@@ -235,9 +235,9 @@ int main(int argc, char const *argv[]) {
   }
 
   ofstream out;
-  out.open("data2.csv", ios_base::out | ios_base::app);
+  out.open("data2.csv");
 
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 20; i++) {
     vector<Delivery> ten = create_sample(deliveries, 10);
     vector<Delivery> fifty = create_sample(deliveries, 50);
     vector<Delivery> hund = create_sample(deliveries, 100);
@@ -261,60 +261,60 @@ int main(int argc, char const *argv[]) {
     cout << 4 << endl;
     duration(ten, drivers, out);
 
-    // cout << 5 << endl;
-    // duration(fifty, tend, out);
-    // cout << 6 << endl;
-    // duration(fifty, twenty, out);
-    // cout << 7 << endl;
-    // duration(fifty, thirty, out);
-    // cout << 8 << endl;
-    // duration(fifty, fourty, out);
-    // cout << 9 << endl;
-    // duration(fifty, drivers, out);
+    cout << 5 << endl;
+    duration(fifty, tend, out);
+    cout << 6 << endl;
+    duration(fifty, twenty, out);
+    cout << 7 << endl;
+    duration(fifty, thirty, out);
+    cout << 8 << endl;
+    duration(fifty, fourty, out);
+    cout << 9 << endl;
+    duration(fifty, drivers, out);
 
-    // cout << 10 << endl;
-    // duration(hund, tend, out);
-    // cout << 11 << endl;
-    // duration(hund, twenty, out);
-    // cout << 12 << endl;
-    // duration(hund, thirty, out);
-    // cout << 13 << endl;
-    // duration(hund, fourty, out);
-    // cout << 14 << endl;
-    // duration(hund, drivers, out);
+    cout << 10 << endl;
+    duration(hund, tend, out);
+    cout << 11 << endl;
+    duration(hund, twenty, out);
+    cout << 12 << endl;
+    duration(hund, thirty, out);
+    cout << 13 << endl;
+    duration(hund, fourty, out);
+    cout << 14 << endl;
+    duration(hund, drivers, out);
 
-    // cout << 15 << endl;
-    // duration(twohun, tend, out);
-    // cout << 16 << endl;
-    // duration(twohun, twenty, out);
-    // cout << 17 << endl;
-    // duration(twohun, thirty, out);
-    // cout << 18 << endl;
-    // duration(twohun, fourty, out);
-    // cout << 19 << endl;
-    // duration(twohun, drivers, out);
+    cout << 15 << endl;
+    duration(twohun, tend, out);
+    cout << 16 << endl;
+    duration(twohun, twenty, out);
+    cout << 17 << endl;
+    duration(twohun, thirty, out);
+    cout << 18 << endl;
+    duration(twohun, fourty, out);
+    cout << 19 << endl;
+    duration(twohun, drivers, out);
 
-    // cout << 20 << endl;
-    // duration(threehun, tend, out);
-    // cout << 21 << endl;
-    // duration(threehun, twenty, out);
-    // cout << 22 << endl;
-    // duration(threehun, thirty, out);
-    // cout << 23 << endl;
-    // duration(threehun, fourty, out);
-    // cout << 24 << endl;
-    // duration(threehun, drivers, out);
+    cout << 20 << endl;
+    duration(threehun, tend, out);
+    cout << 21 << endl;
+    duration(threehun, twenty, out);
+    cout << 22 << endl;
+    duration(threehun, thirty, out);
+    cout << 23 << endl;
+    duration(threehun, fourty, out);
+    cout << 24 << endl;
+    duration(threehun, drivers, out);
 
-    // cout << 25 << endl;
-    // duration(deliveries, tend, out);
-    // cout << 26 << endl;
-    // duration(deliveries, twenty, out);
-    // cout << 27 << endl;
-    // duration(deliveries, thirty, out);
-    // cout << 28 << endl;
-    // duration(deliveries, fourty, out);
-    // cout << 29 << endl;
-    // duration(deliveries, drivers, out);
+    cout << 25 << endl;
+    duration(deliveries, tend, out);
+    cout << 26 << endl;
+    duration(deliveries, twenty, out);
+    cout << 27 << endl;
+    duration(deliveries, thirty, out);
+    cout << 28 << endl;
+    duration(deliveries, fourty, out);
+    cout << 29 << endl;
+    duration(deliveries, drivers, out);
   }
   out.close();
 

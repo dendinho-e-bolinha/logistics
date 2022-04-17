@@ -2,12 +2,16 @@
 #include "constants.h"
 #include "dataset.h"
 #include "entities/delivery.h"
+#include "entities/driver.h"
+#include <vector>
+#include <thread>
 
-#include "src/scenario1.cpp"
+#include "scenarios/reward_optimization.h"
 
 using namespace std;
 
 int main() {
+    srand(time(NULL)); rand();
     File file(DELIVERIES_FILE_PATH);
     vector<Delivery> deliveries;
 
@@ -25,24 +29,107 @@ int main() {
         drivers.push_back(driver);
     }
 
-    solve(drivers, deliveries);
+    // solve(drivers, deliveries);
     
-    for (int i = 0; i < drivers.size(); i++) {
-        Driver &driver = drivers.at(i);
-        cout << "\nNumber: " << i << "\nSelected: " << boolalpha << driver.is_selected << "\n"; 
-        if (driver.is_selected) {
-            cout << "Volume: " << driver.current_volume << " / " << driver.get_max_volume() << '\n'
-                << "Weight: " << driver.current_weight << " / " << driver.get_max_weight() << '\n'
-                << "Duration: " << driver.minutes_used << " / " << (24 * 60) << '\n';
-        } else break;
+    // for (int i = 0; i < drivers.size(); i++) {
+    //     Driver &driver = drivers.at(i);
+    //     cout << "\nNumber: " << i << "\nSelected: " << boolalpha << driver.is_selected << "\n"; 
+    //     if (driver.is_selected) {
+    //         cout << "Volume: " << driver.current_volume << " / " << driver.get_max_volume() << '\n'
+    //             << "Weight: " << driver.current_weight << " / " << driver.get_max_weight() << '\n'
+    //             << "Duration: " << driver.minutes_used << " / " << (24 * 60) << '\n';
+    //     } else break;
+    // }
+
+    // for (int i = 0; i < deliveries.size(); i++) {
+    //     Delivery &delivery = deliveries.at(i);
+    //     cout << "\nNumber: " << i << "\nSelected: " << boolalpha << (delivery.selected_driver != -1) << '\n'; 
+    //     if (delivery.selected_driver != -1) {
+    //         cout << "Driver: " << delivery.selected_driver << '\n';
+    //     }
+    // }
+
+    // Driver babyDriver(6, 6, 12);
+    // vector<Delivery> babyIpad = { 
+    //     { 2, 2, 51, 4 }, //
+    //     { 3, 3, 12, 3 },
+    //     { 4, 4, 100, 1 }, 
+    //     { 6, 6, 67, 1 }, //
+    //     { 8, 8, 1, 300 }, 
+    //     { 12, 12, 49, 1 }, //
+    //     { 10, 10, 50, 1 }
+    // };
+
+    // SparseBoobacube boobacube;
+    // knapsack(boobacube, deliveries, deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60);
+
+    // cout << boobacube.at({ deliveries.size(), drivers.at(0).get_max_weight(), drivers.at(0).get_max_volume(), 8 * 60 }) << endl;
+
+    // cout << boobacube.size() << endl;
+    // cout << boobacube.max_size() << endl;
+
+
+    // bool running[1];
+    // for (int i = 0; i < sizeof(running); i++) {
+    //     running[i] = false;
+    // }
+
+    // for (Driver &driver : drivers) {
+    //     int available_index;
+    //     while (running[available_index]) {
+    //         available_index++;
+    //         available_index %= sizeof(running);
+    //     }
+
+    //     running[available_index] = true;
+    //     thread t([&running, available_index, &driver, &deliveries]() {
+
+    //         cout << "\n\n\n\n\n";
+    //         auto entry = two_dim_knapsack(driver, deliveries, [](Delivery delivery, Driver driver) {
+    //             return delivery.get_reward();
+    //         }, available_index);
+
+    //         cout << "(#" << available_index << ") " << entry.n << ' ' << entry.reward << ' ' << entry.weight << ' ' << entry.volume << ' ' << entry.duration << endl << endl;
+
+    //         auto de = find_deliveries(driver, deliveries, entry, [](Delivery delivery, Driver driver) {
+    //             return delivery.get_reward();
+    //         }, available_index);
+
+    //         for (auto d : de) {
+    //             cout << "(#" << available_index << ") " << d.get_volume() << ' ' << d.get_weight() << ' ' << d.get_reward() << ' ' << d.get_duration() << endl;
+    //         }
+
+    //         running[available_index] = false;
+    //     });
+
+    //     t.detach();
+    // }
+
+    RewardOptimization opt(drivers, deliveries);
+    opt.solve();
+
+    vector<int> profits(drivers.size(), 0);
+    for (int i = 0; i < profits.size(); i++) {
+        profits[i] -= drivers[i].get_daily_cost();
     }
 
-    for (int i = 0; i < deliveries.size(); i++) {
-        Delivery &delivery = deliveries.at(i);
-        cout << "\nNumber: " << i << "\nSelected: " << boolalpha << (delivery.selected_driver != -1) << '\n'; 
+
+    for (const Delivery &delivery : opt.getDeliveries()) {
         if (delivery.selected_driver != -1) {
-            cout << "Driver: " << delivery.selected_driver << '\n';
+            cout << "Delivered" << endl;
+            profits[delivery.selected_driver] += delivery.get_normal_reward();
+        } else {
+            cout << "Not delivered" << endl;
         }
     }
 
+    int sum = 0;
+    for (int i = 0; i < profits.size(); i++) {
+        // if (profits[i] != -drivers[i].get_daily_cost()) {
+            // sum += profits[i];
+            cout << profits[i] << endl;
+        // }
+    }
+
+    cout << endl << endl << sum << endl;
 }

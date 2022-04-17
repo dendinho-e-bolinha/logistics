@@ -237,7 +237,7 @@ int main(int argc, char const *argv[]) {
   ofstream out;
   out.open("data2.csv");
 
-  for (int i = 0; i < 20; i++) {
+//   for (int i = 0; i < ; i++) {
     vector<Delivery> ten = create_sample(deliveries, 10);
     vector<Delivery> fifty = create_sample(deliveries, 50);
     vector<Delivery> hund = create_sample(deliveries, 100);
@@ -248,6 +248,8 @@ int main(int argc, char const *argv[]) {
     vector<Driver> twenty = create_sample(drivers, 20);
     vector<Driver> thirty = create_sample(drivers, 30);
     vector<Driver> fourty = create_sample(drivers, 40);
+
+    // 1
 
     cout << "Generated" << endl;
 
@@ -315,7 +317,7 @@ int main(int argc, char const *argv[]) {
     duration(deliveries, fourty, out);
     cout << 29 << endl;
     duration(deliveries, drivers, out);
-  }
+//   }
   out.close();
 
   // try {

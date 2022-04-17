@@ -249,7 +249,7 @@ int main(int argc, char const *argv[]) {
     vector<Driver> thirty = create_sample(drivers, 30);
     vector<Driver> fourty = create_sample(drivers, 40);
 
-    // 2
+    // 3
 
     cout << "Generated" << endl;
 

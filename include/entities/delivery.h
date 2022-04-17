@@ -20,7 +20,6 @@ public:
     int get_weight() const;
     int get_normal_reward() const;
     int get_seconds() const;
-    int get_minutes() const;
 
     // Reward optimization
     int selected_driver;

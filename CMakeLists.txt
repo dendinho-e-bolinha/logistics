@@ -12,7 +12,7 @@ add_executable(logistics
     src/dataset.cpp
     src/entities/delivery.cpp
     src/entities/driver.cpp
-    src/scenarios/sparse_boobacube.cpp
+    src/sparse_boobacube.cpp
     src/scenarios/reward_optimization.cpp
     src/scenarios/driver_optimization.cpp
     src/scenarios/start_optimization.cpp

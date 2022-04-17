@@ -35,5 +35,3 @@ int Delivery::get_weight() const { return weight; }
 int Delivery::get_normal_reward() const { return normal_reward; }
 
 int Delivery::get_seconds() const { return seconds; }
-
-int Delivery::get_minutes() const { return minutes; }

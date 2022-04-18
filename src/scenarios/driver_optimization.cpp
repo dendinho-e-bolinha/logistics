@@ -41,9 +41,6 @@ void DriverOptimization::solve() {
             if (available_bins.size() > 0) {
                 int selected_bin = 0;
 
-                // Randomly select bin
-                // ...
-
                 Driver temp = drivers.at(available_bins.at(selected_bin));
                 drivers.at(available_bins.at(selected_bin)) = drivers.at(selected_until);
                 drivers.at(selected_until) = temp;

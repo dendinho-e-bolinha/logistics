@@ -130,7 +130,9 @@ void RewardOptimization::freezeDelivery(vector<Delivery>::iterator it) {
 void RewardOptimization::solve() {
   vector<Driver> finishedDrivers;
   vector<Delivery> finishedDeliveries;
-  for (int N = 0; N < 10; N++) {
+
+  int tries = 0;
+  while (tries < 3) {
     if (drivers.empty() || deliveries.empty()) {
       break;
     }
@@ -148,7 +150,6 @@ void RewardOptimization::solve() {
     }
 
     for (int i = 0; i < drivers.size(); i++) {
-      cout << "Driver " << (i + 1) << "/" << drivers.size() << endl;
 
       frozenDeliveries = 0;
       boobacube.clear();
@@ -239,6 +240,8 @@ void RewardOptimization::solve() {
       }
     }
 
+    int prevNumDrivers = drivers.size();
+
     auto currDriver = drivers.begin();
     for (int i = 0; i < drivers.size(); i++) {
       if (profit[i] >= 0) {
@@ -264,6 +267,12 @@ void RewardOptimization::solve() {
       } else {
         currDriver++;
       }
+    }
+
+    if (prevNumDrivers == drivers.size()) {
+      tries++;
+    } else {
+      tries = 0;
     }
   }
 

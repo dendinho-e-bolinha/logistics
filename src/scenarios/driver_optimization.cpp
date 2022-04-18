@@ -9,7 +9,7 @@ using namespace std;
 bool DriverOptimization::can_delivery_fit(const Delivery &delivery, const Driver &driver) {
     return driver.current_volume + delivery.get_volume() <= driver.get_max_volume()
            && driver.current_weight + delivery.get_weight() <= driver.get_max_weight()
-           && driver.used_seconds + delivery.get_minutes() <= 24 * 3600;
+           && driver.used_seconds + delivery.get_seconds() <= 8 * 3600;
 }
 
 void DriverOptimization::solve() {
@@ -41,9 +41,6 @@ void DriverOptimization::solve() {
             if (available_bins.size() > 0) {
                 int selected_bin = 0;
 
-                // Randomly select bin
-                // ...
-
                 Driver temp = drivers.at(available_bins.at(selected_bin));
                 drivers.at(available_bins.at(selected_bin)) = drivers.at(selected_until);
                 drivers.at(selected_until) = temp;
@@ -54,7 +51,7 @@ void DriverOptimization::solve() {
 
                 drivers.at(selected_until).current_volume += delivery.get_volume();
                 drivers.at(selected_until).current_weight += delivery.get_weight();
-                drivers.at(selected_until).used_seconds += delivery.get_minutes();
+                drivers.at(selected_until).used_seconds += delivery.get_seconds();
 
                 selected_until++;
             }
@@ -65,7 +62,7 @@ void DriverOptimization::solve() {
             Driver &selected_driver = drivers.at(fits_in);
             selected_driver.current_volume += delivery.get_volume();
             selected_driver.current_weight += delivery.get_weight();
-            selected_driver.used_seconds += delivery.get_minutes();
+            selected_driver.used_seconds += delivery.get_seconds();
         }
     }
 }

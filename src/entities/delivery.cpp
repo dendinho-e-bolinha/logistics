@@ -6,9 +6,9 @@
 
 using namespace std;
 
-Delivery::Delivery(int volume, int weight, int normal_reward, int seconds, int selected_driver, int search_reward)
+Delivery::Delivery(int volume, int weight, int normal_reward, int seconds, int selected_driver, int search_reward, int starting_time)
     : volume(volume), weight(weight), normal_reward(normal_reward),
-      seconds(seconds), selected_driver(selected_driver), search_reward(search_reward) {
+      seconds(seconds), selected_driver(selected_driver), search_reward(search_reward), starting_time(starting_time) {
   int minutes = seconds / 60;
   this->minutes = seconds % 60 == 0 ? minutes : minutes + 1;
 }
@@ -35,5 +35,3 @@ int Delivery::get_weight() const { return weight; }
 int Delivery::get_normal_reward() const { return normal_reward; }
 
 int Delivery::get_seconds() const { return seconds; }
-
-int Delivery::get_minutes() const { return minutes; }

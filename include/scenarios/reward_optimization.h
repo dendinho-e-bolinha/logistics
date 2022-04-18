@@ -7,10 +7,13 @@
 #include "../entities/driver.h"
 
 class RewardOptimization {
+
     std::vector<Driver> drivers;
+
     std::vector<Delivery> deliveries;
 
     SparseBoobacube boobacube;
+
     int frozenDeliveries;
 
     void knapsack(int n, int wl, int vl, int tl);

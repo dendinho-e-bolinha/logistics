@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.20.2)
 project(logistics)
 
 set(CMAKE_CXX_STANDARD 20)
-
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 include_directories(include)
 
 add_executable(logistics
@@ -11,10 +12,11 @@ add_executable(logistics
     src/entities/delivery.cpp
     src/entities/driver.cpp
     src/interact.cpp
-    src/scenario1.cpp
-    src/scenario2.cpp
-    src/scenario3.cpp
     src/ui.cpp
+    src/sparse_boobacube.cpp
+    src/scenarios/reward_optimization.cpp
+    src/scenarios/driver_optimization.cpp
+    src/scenarios/start_optimization.cpp
 )
 
 find_package(Doxygen)

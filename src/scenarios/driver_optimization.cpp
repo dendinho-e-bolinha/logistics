@@ -1,18 +1,18 @@
+#include "scenarios/driver_optimization.h"
+
 #include <iostream>
 #include <string.h>
 #include <vector>
 
-#include "scenario1.h"
-
 using namespace std;
 
-bool scenario1::can_delivery_fit(const Delivery &delivery, const Driver &driver) {
+bool DriverOptimization::can_delivery_fit(const Delivery &delivery, const Driver &driver) {
     return driver.current_volume + delivery.get_volume() <= driver.get_max_volume()
-        && driver.current_weight + delivery.get_weight() <= driver.get_max_weight()
-        && driver.minutes_used + delivery.get_duration() <= 24 * 3600;
+           && driver.current_weight + delivery.get_weight() <= driver.get_max_weight()
+           && driver.used_seconds + delivery.get_seconds() <= 8 * 3600;
 }
 
-void scenario1::solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
+void DriverOptimization::solve() {
     if (drivers.empty() || deliveries.empty()) {
         return;
     }
@@ -43,9 +43,6 @@ void scenario1::solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
             if (available_bins.size() > 0) {
                 int selected_bin = 0;
 
-                // Randomly select bin
-                // ...
-
                 Driver temp = drivers.at(available_bins.at(selected_bin));
                 drivers.at(available_bins.at(selected_bin)) = drivers.at(selected_until);
                 drivers.at(selected_until) = temp;
@@ -56,7 +53,7 @@ void scenario1::solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
 
                 drivers.at(selected_until).current_volume += delivery.get_volume();
                 drivers.at(selected_until).current_weight += delivery.get_weight();
-                drivers.at(selected_until).minutes_used += delivery.get_duration();
+                drivers.at(selected_until).used_seconds += delivery.get_seconds();
 
                 selected_until++;
             }
@@ -67,7 +64,18 @@ void scenario1::solve(vector<Driver> &drivers, vector<Delivery> &deliveries) {
             Driver &selected_driver = drivers.at(fits_in);
             selected_driver.current_volume += delivery.get_volume();
             selected_driver.current_weight += delivery.get_weight();
-            selected_driver.minutes_used += delivery.get_duration();
+            selected_driver.used_seconds += delivery.get_seconds();
         }
     }
 }
+
+DriverOptimization::DriverOptimization(const vector<Driver> &drivers, const vector<Delivery> &deliveries) : drivers(
+        drivers), deliveries(deliveries) {}
+
+const vector<Driver> &DriverOptimization::getDrivers() const {
+    return drivers;
+}
+
+const vector<Delivery> &DriverOptimization::getDeliveries() const {
+    return deliveries;
+};

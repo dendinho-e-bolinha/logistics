@@ -150,7 +150,6 @@ void RewardOptimization::solve() {
     }
 
     for (int i = 0; i < drivers.size(); i++) {
-      // cout << "Driver " << (i + 1) << "/" << drivers.size() << endl;
 
       frozenDeliveries = 0;
       boobacube.clear();

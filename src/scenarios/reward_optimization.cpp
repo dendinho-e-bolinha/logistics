@@ -1,11 +1,11 @@
 #include "scenarios/reward_optimization.h"
+#include "constants.h"
 #include <algorithm>
 #include <iostream>
 
 using namespace std;
 
 #define MAX_KNAPSACK 20
-#define WORK_TIME (8 * 60 * 60)
 
 RewardOptimization::RewardOptimization(const vector<Driver> &drivers,
                                        const vector<Delivery> &deliveries)
@@ -200,7 +200,13 @@ void RewardOptimization::solve() {
       if (delivery.selected_driver == -1) {
         continue;
       }
+
       profit[delivery.selected_driver] += delivery.get_normal_reward();
+
+      Driver &driver = drivers.at(delivery.selected_driver);
+      driver.current_volume += delivery.get_volume();
+      driver.current_weight += delivery.get_weight();
+      driver.used_seconds += delivery.get_seconds();
     }
 
     vector<int> bestDrivers;

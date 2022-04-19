@@ -1,5 +1,5 @@
 #include "scenarios/driver_optimization.h"
-
+#include "constants.h"
 #include <iostream>
 #include <string.h>
 #include <vector>
@@ -9,15 +9,13 @@ using namespace std;
 bool DriverOptimization::can_delivery_fit(const Delivery &delivery, const Driver &driver) {
     return driver.current_volume + delivery.get_volume() <= driver.get_max_volume()
            && driver.current_weight + delivery.get_weight() <= driver.get_max_weight()
-           && driver.used_seconds + delivery.get_seconds() <= 8 * 3600;
+           && driver.used_seconds + delivery.get_seconds() <= WORK_TIME;
 }
 
 void DriverOptimization::solve() {
     if (drivers.empty() || deliveries.empty()) {
         return;
     }
-
-
 
     int selected_until = 0;
     for (Delivery &delivery : deliveries) {

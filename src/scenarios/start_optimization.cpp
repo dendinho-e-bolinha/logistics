@@ -1,16 +1,12 @@
 #include "scenarios/start_optimization.h"
-
+#include "constants.h"
 #include <vector>
 #include <algorithm>
 
 using namespace std;
 
-StartOptimization::StartOptimization(const vector<Driver> &drivers, const vector<Delivery> &deliveries) : drivers(
-        drivers), deliveries(deliveries), averageStartingTime(0) {}
+StartOptimization::StartOptimization(const vector<Delivery> &deliveries) : deliveries(deliveries) {}
 
-const vector<Driver> &StartOptimization::getDrivers() const {
-    return drivers;
-}
 
 const vector<Delivery> &StartOptimization::getDeliveries() const {
     return deliveries;
@@ -21,24 +17,17 @@ void StartOptimization::solve() {
         return delivery1.get_seconds() < delivery2.get_seconds();
     });
 
-    int available_seconds = 8 * 3600; // 9 to 5 working time (8 hours)
-    int sum_starting_time = 0;
-    int deliveries_made = 0;
+    int available_seconds = WORK_TIME; // 9 to 5 working time (8 hours)
 
     deliveries.at(0).starting_time = 0;
-
-    for (int i = 1; i < deliveries.size(); ++i) {
+    for (int i = 0; i < deliveries.size() - 1; ++i) {
         Delivery &delivery = deliveries.at(i);
-        Delivery &previous_delivery = deliveries.at(i - 1);
-        
-        delivery.starting_time = previous_delivery.starting_time + previous_delivery.get_seconds();
-        if (delivery.starting_time > available_seconds) {
+        int end = delivery.starting_time + delivery.get_seconds();
+        if (end > WORK_TIME) {
             break;
         }
 
-        sum_starting_time += delivery.starting_time;
-        deliveries_made++;
+        Delivery &next_delivery = deliveries.at(i + 1);
+        next_delivery.starting_time = end;
     }
-
-    averageStartingTime = 9 + sum_starting_time / ((float) (deliveries_made * 3600));
 }

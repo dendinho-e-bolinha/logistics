@@ -8,25 +8,14 @@
 #include <string>
 
 class UI {
-    std::string drivers_file;
-    std::string deliveries_file;
-
     bool scenario1 = false;
     bool scenario2 = false;
     bool scenario3 = false;
 
-    // TODO: Implement features late
-    bool transfer = false;
-    bool efficacy = false;
-
-    bool verbose_mode = false;
+    bool verbose;
 
     std::vector<Delivery> deliveries;
     std::vector<Driver> drivers;
-
-    std::vector<Delivery> currentDeliveries;
-    std::vector<Driver> currentDrivers;
-
 
     /**
      * @brief Lets the user pick the file where to get the data from
@@ -42,15 +31,7 @@ class UI {
      */
     Menu get_scenario_menu();
 
-    /**
-     * @brief Gets any extras the user might choose
-     * 
-     * @return Menu 
-     */
-    Menu get_extras_menu();
-
-
-    void show_selection();
+    void show_selection(const std::vector<Driver> &currentDrivers, const std::vector<Delivery> &currentDeliveries) const;
 
     public:
         /**
@@ -58,6 +39,5 @@ class UI {
          */
         void start();
 
-        UI(std::string verbose_mode);
-        UI();
+        UI(bool verbose = false);
 };

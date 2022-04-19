@@ -91,19 +91,6 @@ RewardOptimization::getSelectedDeliveries(const Driver &driver) {
                                WORK_TIME - driver.used_seconds);
 }
 
-int RewardOptimization::getReward(int n, int wl, int vl, int tl) {
-  return boobacube.at({n, wl, vl, tl});
-}
-
-int RewardOptimization::getReward(const Driver &driver) {
-  int numAvailableDeliveries = deliveries.size() - frozenDeliveries;
-  int step = min(numAvailableDeliveries, MAX_KNAPSACK);
-
-  return getReward(step, driver.get_max_weight() - driver.current_weight,
-                   driver.get_max_volume() - driver.current_volume,
-                   WORK_TIME - driver.used_seconds);
-}
-
 void RewardOptimization::randomizeDeliveries() {
   int numAvailableDeliveries = deliveries.size() - frozenDeliveries;
 

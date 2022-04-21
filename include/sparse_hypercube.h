@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 /**
- * @brief A data structure for storing sparse 4-dimensional data
+ * @brief A data structure for storing and retrieving sparse 4-dimensional data
  */
 class SparseHypercube {
     public:

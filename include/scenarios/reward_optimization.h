@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "sparse_boobacube.h"
+#include "sparse_hypercube.h"
 #include "../entities/delivery.h"
 #include "../entities/driver.h"
 
@@ -14,8 +14,8 @@ class RewardOptimization {
     /** @brief Vector containing all deliveries */
     std::vector<Delivery> deliveries;
 
-    /** @brief Boobacube for storing knapsack data */
-    SparseBoobacube boobacube;
+    /** @brief Hypercube for storing knapsack data */
+    SparseHypercube hypercube;
 
     /** @brief Number of deliveries processed by the knapsack algorithm */
     int frozenDeliveries;

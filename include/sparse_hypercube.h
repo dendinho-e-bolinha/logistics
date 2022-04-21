@@ -3,13 +3,13 @@
 #include <unordered_map>
 
 /**
- * @brief Sparse Boobacube Algorithm
+ * @brief A data structure for storing sparse 4-dimensional data
  */
-class SparseBoobacube {
+class SparseHypercube {
     public:
 
         /**
-         * @brief Manages a Entry
+         * @brief A 4-dimensional entry for the data structure
          */
         class Entry {
             int a, b, c, d;
@@ -48,7 +48,7 @@ class SparseBoobacube {
         /**
          * @brief Map with an Entry and its hash
          */
-        std::unordered_map<Entry, int, EntryHash> boobacube;
+        std::unordered_map<Entry, int, EntryHash> hypercube;
 
         /**
          * @brief Default value
@@ -57,14 +57,14 @@ class SparseBoobacube {
 
     public:
         /**
-        /* @brief Constructs a new SparseBoobacube object
+        /* @brief Constructs a new SparseHypercube object
         /*
-        /* @param defaultValue The boobacube's default value
+        /* @param defaultValue The hypercube's default value
         */
-        SparseBoobacube(int defaultValue = -1);
+        SparseHypercube(int defaultValue = -1);
 
         /**
-        /* @brief Inserts or assigns a new Entry object into the sparse boobacube
+        /* @brief Inserts or assigns a new Entry object into the sparse hypercube
         /*
         /* @param entry The entry to be added
         /* @param value The correspondent value
@@ -78,16 +78,16 @@ class SparseBoobacube {
         */
         int at(Entry entry) const;
 
-        /** @brief Returns the boobacube's size */
+        /** @brief Returns the hypercube's size */
         std::size_t size() const;
 
         /** 
-        /* @brief Erases an Entry object from the boobacube
+        /* @brief Erases an Entry object from the hypercube
         /*
         /* @param entry The Entry object to be erased
         */
         void erase(Entry entry);
 
-        /** @brief Clears all data in boobacube */
+        /** @brief Clears all data in the hypercube */
         void clear();
 };

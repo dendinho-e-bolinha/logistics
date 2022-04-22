@@ -6,7 +6,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 
 include_directories(include)
-add_executable(codigo
+add_executable(logistics
     main.cpp
     src/dataset.cpp
     src/entities/delivery.cpp

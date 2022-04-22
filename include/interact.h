@@ -13,9 +13,10 @@ public:
 };
 
 class validation_error : public std::exception {
-    const char* reason;
+    std::string reason;
 public:
     validation_error(const char* what);
+    validation_error(std::string what);
     virtual const char* what() const noexcept;
 };
 
@@ -122,7 +123,7 @@ T read_value(const std::string prompt, const std::string warning, const std::fun
     while (true) {
         // Is true if, and only if, all the content present on the line is of the type T
         bool is_input_valid = false;
-        const char *error = warning.c_str();
+        std::string error = warning;
 
         try {
             is_input_valid = std::cin.peek() != '\n'

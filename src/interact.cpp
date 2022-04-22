@@ -12,8 +12,10 @@ const char *end_of_file_exception::what() const noexcept {
 
 validation_error::validation_error(const char* what) : reason(what) {}
 
+validation_error::validation_error(string what) : reason(what) {}
+
 const char *validation_error::what() const noexcept {
-    return this->reason;
+    return this->reason.c_str();
 }
 
 void MenuBlock::add_option(const std::string &text, const std::function<void()> &callback) {

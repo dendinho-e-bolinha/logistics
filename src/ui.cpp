@@ -47,14 +47,18 @@ void UI::start() {
 }
 
 string UI::choose_file_menu(string type) {
-    string user_choice = read_value<string>("Please choose the file to read " + type + " data from: ", "File not found", [&](const string filename) {
+    string user_choice = read_value<string>("Please choose the file to read " + type + " data from: ", "Invalid filename", [&](const string filename) {
         string fileExtension = filename.substr(filename.find_last_of(".") + 1);
         if (fileExtension != "txt") {
             throw validation_error("Unsupported extension (valid options: txt)");
         }
 
         ifstream infile(DATASET_PATH + filename);
-        return infile.is_open();
+        if (!infile.is_open()) {
+            throw validation_error("File not found (" + (DATASET_PATH + filename) + ")");
+        }
+
+        return true;
     });
 
     return DATASET_PATH + user_choice;

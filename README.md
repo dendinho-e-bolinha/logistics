@@ -14,7 +14,7 @@ This project uses [cmake](https://cmake.org/). Assuming it's installed and prope
 
 ## Running
 
-Simply run the executable generated in the last section.
+Simply run the executable generated in the last section. Don't forget to put your data files in a folder named `input`.
 
 ## Unit info
 

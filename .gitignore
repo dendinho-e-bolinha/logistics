@@ -36,6 +36,3 @@ cmake-build-debug/
 build/
 .idea/
 .vscode/
-
-# Doxygen
-docs/output

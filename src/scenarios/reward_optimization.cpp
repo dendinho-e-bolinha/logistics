@@ -13,11 +13,11 @@ RewardOptimization::RewardOptimization(const vector<Driver> &drivers,
 
 void RewardOptimization::knapsack(int n, int wl, int vl, int tl) {
   if (n == 0 || wl <= 0 || vl <= 0 || tl <= 0) {
-    boobacube.insert({n, wl, vl, tl}, 0);
+    hypercube.insert({n, wl, vl, tl}, 0);
     return;
   }
 
-  if (boobacube.at({n - 1, wl, vl, tl}) == -1) {
+  if (hypercube.at({n - 1, wl, vl, tl}) == -1) {
     knapsack(n - 1, wl, vl, tl);
   }
 
@@ -26,18 +26,18 @@ void RewardOptimization::knapsack(int n, int wl, int vl, int tl) {
                    item.get_seconds() > tl;
 
   if (cannotFit) {
-    boobacube.insert({n, wl, vl, tl}, boobacube.at({n - 1, wl, vl, tl}));
+    hypercube.insert({n, wl, vl, tl}, hypercube.at({n - 1, wl, vl, tl}));
   } else {
-    if (boobacube.at({n - 1, wl - item.get_weight(), vl - item.get_volume(),
+    if (hypercube.at({n - 1, wl - item.get_weight(), vl - item.get_volume(),
                       tl - item.get_seconds()}) == -1) {
       knapsack(n - 1, wl - item.get_weight(), vl - item.get_volume(),
                tl - item.get_seconds());
     }
 
-    boobacube.insert(
+    hypercube.insert(
         {n, wl, vl, tl},
-        max(boobacube.at({n - 1, wl, vl, tl}),
-            boobacube.at({n - 1, wl - item.get_weight(), vl - item.get_volume(),
+        max(hypercube.at({n - 1, wl, vl, tl}),
+            hypercube.at({n - 1, wl - item.get_weight(), vl - item.get_volume(),
                           tl - item.get_seconds()}) +
                 item.search_reward));
   }
@@ -66,7 +66,7 @@ RewardOptimization::getSelectedDeliveries(int n, int wl, int vl, int tl) {
     return {};
   }
 
-  if (boobacube.at({n, wl, vl, tl}) > boobacube.at({n - 1, wl, vl, tl})) {
+  if (hypercube.at({n, wl, vl, tl}) > hypercube.at({n - 1, wl, vl, tl})) {
     vector<Delivery>::iterator it = deliveries.begin() + (n - 1);
 
     auto rest =
@@ -89,19 +89,6 @@ RewardOptimization::getSelectedDeliveries(const Driver &driver) {
                                driver.get_max_weight() - driver.current_weight,
                                driver.get_max_volume() - driver.current_volume,
                                WORK_TIME - driver.used_seconds);
-}
-
-int RewardOptimization::getReward(int n, int wl, int vl, int tl) {
-  return boobacube.at({n, wl, vl, tl});
-}
-
-int RewardOptimization::getReward(const Driver &driver) {
-  int numAvailableDeliveries = deliveries.size() - frozenDeliveries;
-  int step = min(numAvailableDeliveries, MAX_KNAPSACK);
-
-  return getReward(step, driver.get_max_weight() - driver.current_weight,
-                   driver.get_max_volume() - driver.current_volume,
-                   WORK_TIME - driver.used_seconds);
 }
 
 void RewardOptimization::randomizeDeliveries() {
@@ -152,7 +139,7 @@ void RewardOptimization::solve() {
     for (int i = 0; i < drivers.size(); i++) {
 
       frozenDeliveries = 0;
-      boobacube.clear();
+      hypercube.clear();
 
       Driver &driver = drivers.at(i);
       for (Delivery &delivery : deliveries) {

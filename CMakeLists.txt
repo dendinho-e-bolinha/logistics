@@ -13,7 +13,7 @@ add_executable(logistics
     src/entities/driver.cpp
     src/interact.cpp
     src/ui.cpp
-    src/sparse_boobacube.cpp
+    src/sparse_hypercube.cpp
     src/scenarios/reward_optimization.cpp
     src/scenarios/driver_optimization.cpp
     src/scenarios/start_optimization.cpp

@@ -11,8 +11,9 @@ This project uses [cmake](https://cmake.org/). Assuming it's installed and prope
 1. `cmake -S . -B build` in this project's directory to generate the build system.
 2. To build the project's documentation, run `cmake --build build --target documentacao`.
 3. To build the project's executable, run `cmake --build build --config Release --target logistics`.
-   - If you executed the command on the root folder, the executable can be found under the `build/codigo/` directory, with the name `logistics`.
-   - If you executed the command on the `codigo` folder, the executable can be found under the `build/` directory, with the name `logistics`.
+   - The executable can be found under the `build/codigo/` directory, with the name `logistics`.
+
+**Warning:** Execute these commands on the root of the repository (where the codigo, documentacao, input and apresentacao folders are located at)! 
 
 ## Running
 
